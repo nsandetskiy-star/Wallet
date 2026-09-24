@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f4">
+  <title>Мои финансы — доходы и расходы</title>
+  <style>
+    :root{--bg:#f5f7f4;--paper:#fff;--ink:#17231e;--muted:#77847d;--line:#e8ede9;--green:#177a54;--green-bg:#e8f5ed;--red:#c45148;--red-bg:#fff0ed;--lime:#d5f36a;--shadow:0 12px 36px #23392b0b}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,input,select{font:inherit} button{cursor:pointer} .shell{max-width:1120px;margin:auto;padding:34px 28px 60px}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:35px}.brand{display:flex;gap:12px;align-items:center;font-size:18px;font-weight:750;letter-spacing:-.4px}.brand-icon{width:40px;height:40px;border-radius:13px;background:var(--lime);display:grid;place-items:center;font-size:21px}.local-note{color:var(--muted);font-size:12px}
+    .intro{display:flex;justify-content:space-between;align-items:end;margin-bottom:24px;gap:20px}h1{font-size:32px;letter-spacing:-1.2px;margin:0 0 5px}.sub{color:var(--muted);margin:0}.period{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px 12px;color:var(--muted);font-size:13px}.period input{border:0;outline:0;color:var(--ink);font-weight:650;background:transparent}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}.card,.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.card{padding:21px 22px;min-height:132px;position:relative;overflow:hidden}.card-label{color:var(--muted);font-size:13px;font-weight:550}.card-value{font-size:29px;letter-spacing:-.8px;font-weight:750;margin-top:14px}.card-icon{position:absolute;right:20px;top:19px;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:16px}.income .card-icon{background:var(--green-bg);color:var(--green)}.expense .card-icon{background:var(--red-bg);color:var(--red)}.balance .card-icon{background:#f1f5df;color:#658322}.positive{color:var(--green)}.negative{color:var(--red)}
+    .layout{display:grid;grid-template-columns:1.06fr .94fr;gap:18px;align-items:start}.panel{padding:23px}.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:21px}h2{font-size:17px;letter-spacing:-.3px;margin:0}.hint{color:var(--muted);font-size:12px;margin-top:4px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:650;color:#526159}.field input,.field select{height:43px;border:1px solid var(--line);border-radius:10px;padding:0 12px;background:#fff;color:var(--ink);outline:none}.field input:focus,.field select:focus{border-color:#78b99b;box-shadow:0 0 0 3px #177a5412}.type-switch{display:grid;grid-template-columns:1fr 1fr;background:#f2f5f2;border-radius:11px;padding:4px}.type-switch button{border:0;border-radius:8px;padding:9px;color:var(--muted);background:transparent;font-weight:650}.type-switch button.active[data-type="expense"]{background:white;color:var(--red);box-shadow:0 1px 4px #18251b12}.type-switch button.active[data-type="income"]{background:white;color:var(--green);box-shadow:0 1px 4px #18251b12}.submit{border:0;background:var(--ink);color:#fff;font-weight:700;border-radius:11px;padding:12px 15px;width:100%;margin-top:17px}.submit:hover{background:#2c4036}
+    .tabs{display:flex;gap:5px;background:#f3f5f3;border-radius:9px;padding:3px}.tabs button{border:0;background:transparent;color:var(--muted);font-size:12px;border-radius:7px;padding:6px 10px}.tabs button.active{background:white;color:var(--ink);box-shadow:0 1px 3px #18251b12}.category-list{display:grid;gap:16px}.cat-row{display:grid;grid-template-columns:30px 1fr auto;gap:11px;align-items:center}.cat-icon{width:30px;height:30px;border-radius:9px;background:#f3f6f2;display:grid;place-items:center;font-size:15px}.cat-name{font-size:13px;font-weight:650}.cat-meta{font-size:11px;color:var(--muted);margin-top:2px}.cat-amount{text-align:right;font-size:13px;font-weight:700}.bar{grid-column:2/4;height:5px;border-radius:8px;background:#edf1ed;margin-top:-6px;overflow:hidden}.bar span{display:block;height:100%;border-radius:8px;background:#8ebaa1}.empty{color:var(--muted);font-size:13px;text-align:center;padding:24px 8px}
+    .transactions{margin-top:18px}.transactions .panel-head{margin-bottom:10px}.tx-list{display:grid}.tx{display:grid;grid-template-columns:38px 1fr auto auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #eff2ef}.tx:last-child{border:0;padding-bottom:0}.tx-icon{width:38px;height:38px;background:#f3f6f2;border-radius:12px;display:grid;place-items:center;font-size:17px}.tx-title{font-size:13px;font-weight:650}.tx-detail{font-size:11px;color:var(--muted);margin-top:3px}.tx-amount{font-size:13px;font-weight:750;white-space:nowrap}.tx-amount.plus{color:var(--green)}.tx-amount.minus{color:var(--red)}.delete{border:0;background:transparent;color:#aab3ad;font-size:18px;padding:4px 7px;border-radius:7px}.delete:hover{background:var(--red-bg);color:var(--red)}
+    .month-caption{font-size:12px;color:var(--muted)}.privacy{margin-top:19px;color:#87928b;font-size:11px;text-align:center}.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;background:#20362a;color:white;border-radius:10px;padding:11px 16px;font-size:13px;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(max-width:760px){.shell{padding:22px 16px 42px}header{margin-bottom:27px}.local-note{display:none}.intro{align-items:start;flex-direction:column}h1{font-size:28px}.period{align-self:stretch;justify-content:space-between}.cards{gap:9px}.card{padding:15px;min-height:116px;border-radius:14px}.card-value{font-size:21px;margin-top:20px}.card-icon{top:12px;right:12px;width:28px;height:28px}.card-label{font-size:11px}.layout{grid-template-columns:1fr}.panel{padding:18px}.transactions{margin-top:15px}}
+    @media(max-width:390px){.cards{grid-template-columns:1fr}.card{min-height:92px}.card-value{margin-top:9px}.card-icon{top:16px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header><div class="brand"><div class="brand-icon">↗</div><span>Мои финансы</span></div><div class="local-note">Личные записи · только на этом устройстве</div></header>
+    <section class="intro"><div><h1>Финансы за месяц</h1><p class="sub">Записывайте операции — сводка обновится автоматически.</p></div><label class="period">Период <input id="month" type="month" aria-label="Выберите месяц"></label></section>
+    <section class="cards" aria-label="Итоги за месяц">
+      <article class="card income"><span class="card-label">Доходы</span><span class="card-icon">↙</span><div class="card-value" id="incomeTotal">0 MDL</div></article>
+      <article class="card expense"><span class="card-label">Расходы</span><span class="card-icon">↗</span><div class="card-value" id="expenseTotal">0 MDL</div></article>
+      <article class="card balance"><span class="card-label">Остаток за месяц</span><span class="card-icon">＝</span><div class="card-value" id="balanceTotal">0 MDL</div></article>
+    </section>
+    <section class="layout">
+      <article class="panel"><div class="panel-head"><div><h2>Новая операция</h2><div class="hint">Добавьте доход или расход</div></div></div>
+        <div class="type-switch" role="group" aria-label="Тип операции"><button class="active" data-type="expense" type="button">Расход</button><button data-type="income" type="button">Доход</button></div>
+        <form id="entryForm"><div class="form-grid" style="margin-top:15px">
+          <div class="field full"><label for="amount">Сумма</label><input id="amount" type="number" min="0.01" step="0.01" placeholder="Например, 250" required></div>
+          <div class="field"><label for="category">Категория</label><select id="category"></select></div>
+          <div class="field"><label for="date">Дата</label><input id="date" type="date" required></div>
+          <div class="field full"><label for="note">Комментарий <span style="font-weight:400;color:#98a29c">(необязательно)</span></label><input id="note" type="text" maxlength="70" placeholder="Например, продукты на неделю"></div>
+        </div><button class="submit" type="submit">Добавить операцию</button></form>
+      </article>
+      <article class="panel"><div class="panel-head"><div><h2>Расходы по категориям</h2><div class="hint" id="categoryCaption">За выбранный месяц</div></div><div class="tabs"><button class="active" data-view="expense" type="button">Расходы</button><button data-view="income" type="button">Доходы</button></div></div><div id="categoryList" class="category-list"></div></article>
+    </section>
+    <section class="panel transactions"><div class="panel-head"><div><h2>Операции</h2><div id="transactionCaption" class="hint">За выбранный месяц</div></div></div><div id="txList" class="tx-list"></div></section>
+    <div class="privacy">Данные сохраняются в памяти браузера на этом устройстве. Очистка данных браузера может удалить записи.</div>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+  <script>
+    (()=>{
+      const KEY='my-finances-v1';
+      const categories={expense:[['Еда','🍲'],['Транспорт','🚌'],['Жильё','🏠'],['Здоровье','💊'],['Покупки','🛍️'],['Развлечения','🎬'],['Связь и интернет','📱'],['Образование','📚'],['Другое','📦']],income:[['Зарплата','💼'],['Подработка','🧑‍💻'],['Подарок','🎁'],['Продажа','🏷️'],['Другое','💰']]};
+      const $=id=>document.getElementById(id); let type='expense',view='expense',items=[];
+      try{items=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(items))items=[]}catch{items=[]}
+      const today=new Date(), localDate=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+      $('month').value=localDate.slice(0,7);$('date').value=localDate;
+      const money=n=>new Intl.NumberFormat('ru-MD',{maximumFractionDigits:2}).format(n)+' MDL';
+      const safe=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      function fillCategories(){ $('category').innerHTML=categories[type].map(([n])=>`<option value="${safe(n)}">${safe(n)}</option>`).join(''); }
+      function monthItems(){return items.filter(x=>x.date?.slice(0,7)===$('month').value)}
+      function render(){
+        const list=monthItems(),inc=list.filter(x=>x.type==='income').reduce((s,x)=>s+x.amount,0),exp=list.filter(x=>x.type==='expense').reduce((s,x)=>s+x.amount,0),bal=inc-exp;
+        $('incomeTotal').textContent=money(inc);$('expenseTotal').textContent=money(exp);$('balanceTotal').textContent=money(bal);$('balanceTotal').className='card-value '+(bal<0?'negative':'positive');
+        const grouped={};list.filter(x=>x.type===view).forEach(x=>grouped[x.category]=(grouped[x.category]||0)+x.amount);
+        const entries=Object.entries(grouped).sort((a,b)=>b[1]-a[1]),max=entries[0]?.[1]||0;
+        $('categoryCaption').textContent=view==='expense'?'За выбранный месяц':'Доходы за выбранный месяц';
+        $('categoryList').innerHTML=entries.length?entries.map(([name,amt])=>{const icon=categories[view].find(c=>c[0]===name)?.[1]||'📦';return `<div class="cat-row"><div class="cat-icon">${icon}</div><div><div class="cat-name">${safe(name)}</div><div class="cat-meta">${Math.round(amt/(view==='expense'?exp:inc)*100)}% от суммы</div></div><div class="cat-amount">${money(amt)}</div><div class="bar"><span style="width:${Math.max(3,amt/max*100)}%"></span></div></div>`}).join(''):`<div class="empty">${view==='expense'?'В этом месяце расходов пока нет.':'В этом месяце доходов пока нет.'}</div>`;
+        const sorted=[...list].sort((a,b)=>b.date.localeCompare(a.date)||b.createdAt-a.createdAt);
+        $('transactionCaption').textContent=`${sorted.length} ${plural(sorted.length,'операция','операции','операций')} за выбранный месяц`;
+        $('txList').innerHTML=sorted.length?sorted.map(x=>{const icon=categories[x.type].find(c=>c[0]===x.category)?.[1]||'📦';return `<div class="tx"><div class="tx-icon">${icon}</div><div><div class="tx-title">${safe(x.note||x.category)}</div><div class="tx-detail">${safe(x.category)} · ${new Date(x.date+'T00:00:00').toLocaleDateString('ru-MD',{day:'numeric',month:'short'})}</div></div><div class="tx-amount ${x.type==='income'?'plus':'minus'}">${x.type==='income'?'+':'−'}${money(x.amount)}</div><button class="delete" type="button" aria-label="Удалить операцию" data-delete="${x.id}">×</button></div>`}).join(''):'<div class="empty">Операций за этот месяц пока нет. Добавьте первую выше.</div>';
+      }
+      function plural(n,a,b,c){const x=n%10,y=n%100;return x===1&&y!==11?a:x>=2&&x<=4&&(y<12||y>14)?b:c}
+      document.querySelectorAll('.type-switch button').forEach(b=>b.addEventListener('click',()=>{type=b.dataset.type;document.querySelectorAll('.type-switch button').forEach(x=>x.classList.toggle('active',x===b));fillCategories()}));
+      document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.view;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));render()}));
+      $('month').addEventListener('change',render);
+      $('entryForm').addEventListener('submit',e=>{e.preventDefault();const amount=Number($('amount').value);if(!(amount>0))return;items.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random(),type,amount,category:$('category').value,date:$('date').value,note:$('note').value.trim(),createdAt:Date.now()});localStorage.setItem(KEY,JSON.stringify(items));$('amount').value='';$('note').value='';render();const t=$('toast');t.textContent=type==='expense'?'Расход добавлен':'Доход добавлен';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1700)});
+      $('txList').addEventListener('click',e=>{const btn=e.target.closest('[data-delete]');if(!btn)return;items=items.filter(x=>x.id!==btn.dataset.delete);localStorage.setItem(KEY,JSON.stringify(items));render()});
+      fillCategories();render();
+    })();
+  </script>
+</body>
+</html>
